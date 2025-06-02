@@ -18,4 +18,4 @@ ENTRYPOINT ["./entrypoint.sh"]
 
 EXPOSE 8000
 
-CMD ["gunicorn", "fileuploader.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "4"]
+CMD ["gunicorn", "fileuploader.wsgi:application", "--bind", "0.0.0.0:8000"]
