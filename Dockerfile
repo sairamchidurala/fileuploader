@@ -19,4 +19,5 @@ ENV PYTHONPATH=/app
 EXPOSE 8000
 
 # Start the server and run migrations/collectstatic at container startup
-CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn fileuploader.wsgi:application --bind 0.0.0.0:8000 --workers 4"]
+# CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn fileuploader.wsgi:application --bind 0.0.0.0:8000 --workers 4"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
