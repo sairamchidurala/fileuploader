@@ -1,23 +1,21 @@
-FROM python:3.9-slim as builder
+FROM python:3.9-slim
 
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
+# Install dependencies
 COPY requirements.txt .
-RUN pip install --user --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-FROM python:3.9-slim
-WORKDIR /app
-
-COPY --from=builder /root/.local /root/.local
+# Copy everything
 COPY . .
 
-ENV PATH=/root/.local/bin:$PATH
-ENV PYTHONPATH=/app
+# Ensure entrypoint is executable
+RUN chmod +x ./entrypoint.sh
 
-# Expose port (optional but good practice)
+# Collect static at runtime
+ENTRYPOINT ["./entrypoint.sh"]
+
 EXPOSE 8000
 
-# Start the server and run migrations/collectstatic at container startup
-# CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn fileuploader.wsgi:application --bind 0.0.0.0:8000 --workers 4"]
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "fileuploader.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "4"]
