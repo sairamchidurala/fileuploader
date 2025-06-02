@@ -61,6 +61,9 @@ cloudinary.config(
     secure=True
 )
 
+ROOT_URLCONF = 'fileuploader.urls'
+WSGI_APPLICATION = 'fileuploader.wsgi.application'  # For production deployment
+
 # Minimal production security
 if not DEBUG:
     SESSION_COOKIE_SECURE = True

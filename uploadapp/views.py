@@ -4,12 +4,13 @@ from .models import UploadedFile
 import cloudinary
 import cloudinary.uploader
 from cloudinary.utils import cloudinary_url
+import os
 
 # Cloudinary configuration
 cloudinary.config( 
-    cloud_name="dhkagydmu", 
-    api_key="355338112275264", 
-    api_secret="ruPMvnRW1dBwqvNm12wxFy5ZEv0",
+    cloud_name=os.environ['CLOUDINARY_CLOUD_NAME'], 
+    api_key=os.environ['CLOUDINARY_API_KEY'], 
+    api_secret=os.environ['CLOUDINARY_API_SECRET'],
     secure=True
 )
 
