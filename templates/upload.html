@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Uploader</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input[type="text"], input[type="file"] { width: 100%; padding: 8px; }
+        button { background: #4CAF50; color: white; padding: 10px 15px; border: none; cursor: pointer; }
+        button:hover { background: #45a049; }
+        .success { margin-top: 20px; padding: 15px; background: #dff0d8; color: #3c763d; }
+        .file-info { margin-top: 20px; padding: 15px; background: #f8f9fa; border: 1px solid #ddd; }
+        .error { color: red; margin-top: 20px; padding: 15px; background: #f8d7da; }
+    </style>
+</head>
+<body>
+    <h1>Upload a File to Cloudinary</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_file_name">File Name:</label>
+            {{ form.file_name }}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_public_id">Public ID (optional):</label>
+            {{ form.public_id }}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_file">File:</label>
+            {{ form.file }}
+        </div>
+        
+        <button type="submit">Upload</button>
+    </form>
+    
+    {% if error %}
+        <div class="error">
+            <h2>Error</h2>
+            <p>{{ error }}</p>
+        </div>
+    {% endif %}
+    
+    {% if uploaded_file %}
+        <div class="success">
+            <h2>Upload Successful!</h2>
+            <p>Your file has been stored in our database.</p>
+        </div>
+        
+        <div class="file-info">
+            <h3>File Information</h3>
+            <p><strong>File Name:</strong> {{ uploaded_file.file_name }}</p>
+            <p><strong>Public ID:</strong> {{ uploaded_file.public_id }}</p>
+            <p><strong>File Type:</strong> {{ uploaded_file.file_type }}</p>
+            <p><strong>File Size:</strong> {{ uploaded_file.file_size|filesizeformat }}</p>
+            <p><strong>Uploaded At:</strong> {{ uploaded_file.created_at }}</p>
+            
+            <h4>Cloudinary URLs</h4>
+            <p><strong>Optimized URL:</strong> <a href="{{ uploaded_file.cloudinary_url }}" target="_blank">{{ uploaded_file.cloudinary_url }}</a></p>
+            <p><strong>Secure URL:</strong> <a href="{{ uploaded_file.secure_url }}" target="_blank">{{ uploaded_file.secure_url }}</a></p>
+        </div>
+    {% endif %}
+</body>
+</html>
