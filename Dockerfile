@@ -15,14 +15,8 @@ COPY . .
 ENV PATH=/root/.local/bin:$PATH
 ENV PYTHONPATH=/app
 
-# Provide a default ALLOWED_HOSTS for build time (adjust as needed)
-ENV ALLOWED_HOSTS=localhost
-
-# Run migrations and collectstatic during image build
-RUN python manage.py migrate --noinput && python manage.py collectstatic --noinput
-
 # Expose port (optional but good practice)
 EXPOSE 8000
 
-# Start the server directly as CMD
-CMD ["gunicorn", "fileuploader.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "4"]
+# Start the server and run migrations/collectstatic at container startup
+CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn fileuploader.wsgi:application --bind 0.0.0.0:8000 --workers 4"]
